@@ -1,0 +1,28 @@
+{
+    "0": {
+        "title": "To Kill A Mockingbird",
+        "author": "Harper Lee",
+        "available": true,
+        "pages": 336,
+        "isbn": 9780061120084
+    },
+    "2": {
+        "title": "One Hundred Years Of Solitude",
+        "author": "Gabriel Garcia Marquez",
+        "available": false,
+        "pages": 457,
+        "isbn": 9785267006323
+    },
+    "3": {
+        "title": "Story Of Malana",
+        "author": "Rakib",
+        "available": "1",
+        "pages": "125"
+    },
+    "4": {
+        "title": "Story Of Malana",
+        "author": "Rakib",
+        "available": "no",
+        "pages": ""
+    }
+}
