@@ -15,7 +15,6 @@
         <form action="a.php" method="post">
             <input class="form-control" type="text", name = "book_search" placeholder="enter book title" required><br>
             <button type="submit" name = "search" class="btn btn-outline-primary">search</button>
-            <button name="delete" class="btn btn-outline-danger">delete</button>
         </form>
     </div>
     <div style="padding-bottom:10px">
@@ -33,11 +32,14 @@
         $name = $_POST["author"];
         $author = $_POST["available"];
         $include = $_POST["pages"];
+        $isbn = $_POST['isbn'];
         $a = [
             "title" => $id,
             "author" => $name,
             "available" => $author,
-            "pages" => $include
+            "pages" => $include,
+            "isbn" =>$isbn
+
         ];
         array_push($users, $a);
         $p = json_encode($users, JSON_PRETTY_PRINT);
@@ -45,12 +47,11 @@
 
     }
     if (isset($_POST["delete"])) {
-        $item = $_POST['book_search'];
-        foreach($users as $u){
-            if($item == $u['title']){
-                $users= array_filter($users, function ($value) use ($u) {
-                    return $value !== $u;
-                }); 
+        $item = $_POST['id'];
+        foreach($users as $key => $u){
+            if($item == $u['isbn']){
+               unset($users[$key]);
+               break;
             }
         }  
         $p = json_encode($users);
@@ -66,6 +67,7 @@
                     echo "<th>"; echo "Book Author"; echo "</td>";
                     echo "<th>"; echo "Availability"; echo "</td>";
                     echo "<th>"; echo "Pages"; echo "</td>";
+                    echo "<th>"; echo "Isbn"; echo "</td>";
                 echo "</tr>";
                 foreach ($users as $u) {
                     if ($u['title'] == $_POST['book_search']){
@@ -74,6 +76,7 @@
                         echo "<td>" . $u['author'] . "</td>";
                         echo "<td>" . $u['available'] . "</td>";
                         echo "<td>" . $u['pages'] ."</td>";
+                        echo "<td>" . $u['isbn'] ."</td>";
                         echo "</tr>";
                     }
                 }
@@ -89,6 +92,8 @@
     echo "<th>Author</th>";
     echo "<th>Available</th>";
     echo "<th>Pages</th>";
+    echo "<th>Isbn</th>";
+    echo "<th>Delete</th>";
     echo "</tr>";
     echo "</thead>";
     echo "<tbody class='table-group-divider'>";
@@ -98,6 +103,12 @@
         echo "<td>" . $u['author'] . "</td>";
         echo "<td>" . $u['available'] . "</td>";
         echo "<td>" . $u['pages'] . "</td>";
+        echo "<td>" . $u['isbn'] . "</td>";
+        echo "<td>";
+        echo " <form method = 'post'>";
+        echo "<input  type='hidden' name='id' class='btn btn-outline-danger' value = '".$u['isbn']."'>";
+        echo "<button name='delete' class='btn btn-outline-danger'>delete</button>";
+        echo "</form>". "</td>";
         echo "</tr>";
     }
     echo "</tbody>";
