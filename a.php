@@ -44,6 +44,7 @@
         array_push($users, $a);
         $p = json_encode($users, JSON_PRETTY_PRINT);
         file_put_contents("file.json", $p);
+        header("Location: a.php");
 
     }
     if (isset($_POST["delete"])) {
@@ -56,6 +57,7 @@
         }  
         $p = json_encode($users);
         file_put_contents("file.json", $p);
+        header("Location: a.php");
     }
 
     if (isset($_POST["search"])) {
@@ -70,7 +72,7 @@
                     echo "<th>"; echo "Isbn"; echo "</td>";
                 echo "</tr>";
                 foreach ($users as $u) {
-                    if ($u['title'] == $_POST['book_search']){
+                    if(strpos($u['title'], $_POST['book_search']) !== false){
                         echo "<tr>";
                         echo "<td>" . $u['title'] . "</td>";
                         echo "<td>" . $u['author'] . "</td>";
