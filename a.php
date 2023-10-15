@@ -47,6 +47,22 @@
         header("Location: a.php");
 
     }
+
+    if(isset($_REQUEST["update"])){
+
+        $s = [
+        "title" => $_POST['title'],
+        "author" => $_POST['author'],
+        "available" => $_POST['available'],
+        "pages" => $_POST['pages'],
+        "isbn" => $_POST['isbn'],
+        ];
+      $users[$_POST['it']] = $s;
+      $p = json_encode($users);
+      file_put_contents("file.json", $p);
+    }
+
+
     if (isset($_POST["delete"])) {
         $item = $_POST['id'];
         foreach($users as $key => $u){
@@ -59,6 +75,7 @@
         file_put_contents("file.json", $p);
         header("Location: a.php");
     }
+    
 
     if (isset($_POST["search"])) {
         echo "<h4 style='text-align:center'>Availability of searched book</h4>";
@@ -72,9 +89,9 @@
                     echo "<th>"; echo "Isbn"; echo "</td>";
                 echo "</tr>";
                 foreach ($users as $u) {
-                    if(strpos($u['title'], $_POST['book_search']) !== false){
+                    if(strpos(strtolower($u['title']), strtolower($_POST['book_search'])) !== false){
                         echo "<tr>";
-                        echo "<td>" . $u['title'] . "</td>";
+                        echo "<td>"  .$u['title'] . "</td>";
                         echo "<td>" . $u['author'] . "</td>";
                         echo "<td>" . $u['available'] . "</td>";
                         echo "<td>" . $u['pages'] ."</td>";
@@ -86,37 +103,44 @@
             echo "</table>";
         echo "</div>";   
     }
-
-    echo "<table class='table'>";
-    echo "<thead>";
-    echo "<tr>";
-    echo "<th>Book Title</th>";
-    echo "<th>Author</th>";
-    echo "<th>Available</th>";
-    echo "<th>Pages</th>";
-    echo "<th>Isbn</th>";
-    echo "<th>Delete</th>";
-    echo "</tr>";
-    echo "</thead>";
-    echo "<tbody class='table-group-divider'>";
-    foreach ($users as $u) {
-        echo "<tr>";
-        echo "<td>" . $u['title'] . "</td>";
-        echo "<td>" . $u['author'] . "</td>";
-        echo "<td>" . $u['available'] . "</td>";
-        echo "<td>" . $u['pages'] . "</td>";
-        echo "<td>" . $u['isbn'] . "</td>";
-        echo "<td>";
-        echo " <form method = 'post'>";
-        echo "<input  type='hidden' name='id' class='btn btn-outline-danger' value = '".$u['isbn']."'>";
-        echo "<button name='delete' class='btn btn-outline-danger'>delete</button>";
-        echo "</form>". "</td>";
-        echo "</tr>";
-    }
-    echo "</tbody>";
-    echo "</table>";
     ?>
-    
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Available</th>
+                <th>Pages</th>
+                <th>Isbn</th>
+                <th>Modification</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody class='table-group-divider'>
+            <?php foreach ($users as $key => $u) { ?>
+            <tr>
+                <td> <?php echo $u['title'] ?> </td>
+                <td> <?php echo $u['author'] ?> </td>
+                <td> <?php echo $u['available'] ?> </td>
+                <td> <?php echo $u['pages'] ?> </td>
+                <td> <?php echo $u['isbn'] ?> </td>
+                <td>
+                    <form action = "b.php" method = "post">
+                        <input  type='hidden' name='id' class='btn btn-outline-danger' value=<?php echo $u['isbn'] ?> >
+                        <button type = "submit" class='btn btn-outline-success'>update</button>
+                    </form>
+                </td>
+                <td>
+                    <form method = 'post'>
+                        <input  type='hidden' name='id' class='btn btn-outline-danger'value=<?php echo $u['isbn'] ?> >
+                        <button type = "submit" name='delete' class='btn btn-outline-danger'>delete</button>
+                    </form>
+                </td>
+            </tr>
+            <?php }?>
+        </tbody>
+    </table>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
